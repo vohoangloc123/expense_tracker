@@ -26,6 +26,24 @@ class _ExpensesState extends State<Expenses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Flutter ExpenseTracker"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              // Add a new expense
+              setState(() {
+                _registeredExpenses.add(Expense(
+                    title: "New Expense",
+                    amount: 0.0,
+                    date: DateTime.now(),
+                    category: Category.Miscellaneous));
+              });
+            },
+          )
+        ],
+      ),
       body: Column(
         children: [
           const Text("The chart will be here"),
