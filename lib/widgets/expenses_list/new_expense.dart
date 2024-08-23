@@ -15,13 +15,25 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
+    final _titleController = TextEditingController();
+    final _amountController = TextEditingController();
+    final _dateController = TextEditingController();
+    @override
+    void dispose() {
+      _titleController.dispose();
+      _amountController.dispose();
+      _dateController.dispose();
+      super.dispose();
+    }
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          const TextField(
+          TextField(
+            controller: _titleController,
             maxLength: 50,
-            decoration: InputDecoration(labelText: "Title"),
+            decoration: const InputDecoration(labelText: "Title"),
           ),
           const TextField(
             decoration: InputDecoration(labelText: "Amount"),
@@ -31,7 +43,7 @@ class _NewExpenseState extends State<NewExpense> {
           ),
           ElevatedButton(
             onPressed: () {
-              print(_enteredTitle);
+              print(_titleController.text);
             },
             child: const Text("Add Expense"),
           )
