@@ -1,7 +1,8 @@
-import 'package:expense_tracker/models/widgets/expenses_list/expenses_list.dart';
+import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
+import 'package:expense_tracker/widgets/expenses_list/new_expense.dart';
 import 'package:flutter/material.dart';
 
-import 'expense.dart';
+import 'models/expense.dart';
 
 class Expenses extends StatefulWidget {
   const Expenses({super.key});
@@ -27,7 +28,7 @@ class _ExpensesState extends State<Expenses> {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return const Text("Add Expense");
+          return const NewExpense();
         });
   }
   /* Hàm showModalBottomSheet hiển thị modal bottom sheet từ dưới lên.
