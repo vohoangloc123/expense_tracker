@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+final formatter = DateFormat.yMd();
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
@@ -13,28 +16,29 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   final _dateController = TextEditingController();
-
+  DateTime? _selectedDate;
   void _saveTitleInput(String inputValue) {
     setState(() {
       _enteredTitle = inputValue;
     });
   }
 
-  void _presentDatePicker() {
+  void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month - 1);
-    showDatePicker(
+
+    final pickedDate = await showDatePicker(
       context: context,
       initialDate: now,
       firstDate: firstDate,
       lastDate: now,
-    ).then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
-      _dateController.text = pickedDate.toString();
+    );
+    setState(() {
+      _selectedDate = pickedDate;
     });
+    print(pickedDate);
   }
+  //Sử dụng async và await giúp làm cho việc viết và duy trì mã dễ dàng hơn, đặc biệt khi làm việc với các tác vụ bất đồng bộ.
 
   @override
   void dispose() {
@@ -73,7 +77,9 @@ class _NewExpenseState extends State<NewExpense> {
                   crossAxisAlignment: CrossAxisAlignment
                       .center, // Aligns the children to the center
                   children: [
-                    const Text("Selected Date"),
+                    Text(_selectedDate == null
+                        ? 'No Date Chosen'
+                        : formatter.format(_selectedDate!)),
                     IconButton(
                       onPressed: _presentDatePicker,
                       icon: const Icon(Icons.calendar_today),
