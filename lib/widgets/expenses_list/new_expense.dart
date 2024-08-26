@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:expense_tracker/models/expense.dart';
+
 final formatter = DateFormat.yMd();
 
 class NewExpense extends StatefulWidget {
@@ -17,6 +19,7 @@ class _NewExpenseState extends State<NewExpense> {
   final _amountController = TextEditingController();
   final _dateController = TextEditingController();
   DateTime? _selectedDate;
+  Category? _selectedCategory = Category.Food;
   void _saveTitleInput(String inputValue) {
     setState(() {
       _enteredTitle = inputValue;
@@ -91,6 +94,27 @@ class _NewExpenseState extends State<NewExpense> {
           ),
           Row(
             children: [
+              DropdownButton(
+                  value: _selectedCategory, //giá trị mặc định
+                  items: Category.values
+                      .map(
+                        (category) => DropdownMenuItem(
+                          value: category, //giá trị của mục
+                          child: Text(
+                            category.name.toUpperCase(),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      if (value == null) {
+                        return;
+                      }
+                      _selectedCategory = value;
+                    });
+                  }),
+              const Spacer(),
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
                 child: const Text("Cancel"),
