@@ -28,14 +28,22 @@ class _ExpensesState extends State<Expenses> {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return const NewExpense();
+          return NewExpense(onAddExpense: _addExpense);
         });
   }
+
   /* Hàm showModalBottomSheet hiển thị modal bottom sheet từ dưới lên.
    context: Là BuildContext của widget hiện tại, giúp xác định vị trí
    để gắn modal vào đúng phần giao diện.
    builder: Hàm builder nhận BuildContext mới, đại diện cho modal bottom sheet,
    dùng để xây dựng các widget bên trong. */
+  void _addExpense(Expense expense) {
+    print('Adding expense: ${expense.toString()}');
+    setState(() {
+      _registeredExpenses
+          .add(expense); // Thêm expense vào danh sách _registeredExpenses
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
