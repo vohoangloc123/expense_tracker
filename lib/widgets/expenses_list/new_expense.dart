@@ -43,6 +43,31 @@ class _NewExpenseState extends State<NewExpense> {
   }
   //Sử dụng async và await giúp làm cho việc viết và duy trì mã dễ dàng hơn, đặc biệt khi làm việc với các tác vụ bất đồng bộ.
 
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null ||
+        _selectedCategory == null) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Invalid Input"),
+          content: const Text("Please enter valid input"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Okay"),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -121,8 +146,7 @@ class _NewExpenseState extends State<NewExpense> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  print(_titleController.text);
-                  print(_amountController.text);
+                  _submitExpenseData();
                 },
                 child: const Text("Add Expense"),
               ),
