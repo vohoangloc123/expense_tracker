@@ -47,13 +47,39 @@ class _ExpensesState extends State<Expenses> {
   }
 
   void _removeExpense(Expense expense) {
+    final expenseIndex = _registeredExpenses
+        .indexOf(expense); // Tìm vị trí expense trong danh sách
     setState(() {
       _registeredExpenses.remove(expense);
     });
+    ScaffoldMessenger.of(context).clearSnackBars(); // Xóa tất cả các snackbar
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text("Expense removed"),
+        duration: const Duration(seconds: 2),
+        action: SnackBarAction(
+          label: "UNDO",
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(expenseIndex, expense);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = const Center(
+      child: Text("No expenses found. Start adding some!"),
+    );
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(
+        expenses: _registeredExpenses,
+        onRemoveExpense: _removeExpense,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Flutter ExpenseTracker"),
