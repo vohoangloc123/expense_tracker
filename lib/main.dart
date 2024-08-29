@@ -5,6 +5,9 @@ void main() {
   runApp(const MyApp());
 }
 
+var kColorScheme =
+    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 96, 59, 181));
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -14,8 +17,33 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData().copyWith(
-          useMaterial3: true,
-          scaffoldBackgroundColor: const Color.fromARGB(255, 220, 189, 252)),
+        useMaterial3: true,
+        colorScheme: kColorScheme,
+        appBarTheme: AppBarTheme(
+          backgroundColor: kColorScheme
+              .onPrimaryContainer, //backgroundColor Xác định màu nền của widget.
+          foregroundColor: kColorScheme
+              .primaryContainer, //foregroundColor: Xác định màu của các thành phần nội dung bên trong widget, chẳng hạn như văn bản hoặc biểu tượng.
+          /*primaryContainer: Thông thường được sử dụng làm màu nền cho các thành phần chính hoặc quan trọng trong giao diện người dùng, như các vùng chứa chính (Container, Button).
+          onPrimaryContainer: Là màu được sử dụng trên màu nền primaryContainer, thường dành cho văn bản hoặc biểu tượng, để tạo ra sự tương phản tốt.*/
+        ),
+        cardTheme: const CardTheme().copyWith(
+          color: kColorScheme.secondaryContainer,
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kColorScheme.primaryContainer,
+          ),
+        ),
+        textTheme: ThemeData().textTheme.copyWith(
+              titleLarge: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: kColorScheme.onSecondaryContainer,
+              ),
+            ),
+      ),
       home: const Expenses(),
     );
   }
