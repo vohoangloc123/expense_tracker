@@ -135,6 +135,9 @@ class _NewExpenseState extends State<NewExpense> {
                           value: category, //giá trị của mục
                           child: Text(
                             category.name.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 14, // Đặt kích thước chữ nhỏ hơn
+                            ),
                           ),
                         ),
                       )
