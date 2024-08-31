@@ -11,12 +11,8 @@ enum Category {
   Utilities,
   Clothing,
   Health,
-  Insurance,
-  Personal,
   Education,
   Entertainment,
-  Miscellaneous,
-  leisure,
 }
 
 final formatter = DateFormat.yMd().format(DateTime.now());
@@ -27,12 +23,8 @@ const categoryIcons = {
   Category.Utilities: Icons.flash_on,
   Category.Clothing: Icons.shopping_bag,
   Category.Health: Icons.local_hospital,
-  Category.Insurance: Icons.security,
-  Category.Personal: Icons.person,
   Category.Education: Icons.school,
   Category.Entertainment: Icons.movie,
-  Category.Miscellaneous: Icons.more_horiz,
-  Category.leisure: Icons.sports_esports,
 };
 
 class Expense {
