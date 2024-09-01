@@ -87,90 +87,182 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
-    return SizedBox(
-      height: double.infinity,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(16, 48, 16, keyboardSpace + 16),
-          child: Column(
-            children: [
-              TextField(
-                controller: _titleController,
-                maxLength: 50,
-                decoration: const InputDecoration(labelText: "Title"),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _amountController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                          prefixText: '\$ ', labelText: "Amount"),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .end, // Aligns the children to the right
-                      crossAxisAlignment: CrossAxisAlignment
-                          .center, // Aligns the children to the center
-                      children: [
-                        Text(_selectedDate == null
-                            ? 'No Date Chosen'
-                            : formatter.format(_selectedDate!)),
-                        IconButton(
-                          onPressed: _presentDatePicker,
-                          icon: const Icon(Icons.calendar_today),
+    return LayoutBuilder(builder: (ctx, constrain) {
+      final width = constrain.maxWidth;
+      return SizedBox(
+        height: double.infinity,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16, 48, 16, keyboardSpace + 16),
+            child: Column(
+              children: [
+                if (width > 600) //Kiểm tra kích thước màn hình
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _titleController,
+                          maxLength: 50,
+                          decoration: const InputDecoration(labelText: "Title"),
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(width: 24),
+                      Expanded(
+                        child: TextField(
+                          controller: _amountController,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                              prefixText: '\$ ', labelText: "Amount"),
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  TextField(
+                    controller: _titleController,
+                    maxLength: 50,
+                    decoration: const InputDecoration(labelText: "Title"),
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  DropdownButton(
-                      value: _selectedCategory, //giá trị mặc định
-                      items: Category.values
-                          .map(
-                            (category) => DropdownMenuItem(
-                              value: category, //giá trị của mục
-                              child: Text(
-                                category.name.toUpperCase(),
-                                style: const TextStyle(
-                                  fontSize: 14, // Đặt kích thước chữ nhỏ hơn
+                if (width > 600)
+                  Row(
+                    children: [
+                      DropdownButton(
+                          value: _selectedCategory, //giá trị mặc định
+                          items: Category.values
+                              .map(
+                                (category) => DropdownMenuItem(
+                                  value: category, //giá trị của mục
+                                  child: Text(
+                                    category.name.toUpperCase(),
+                                    style: const TextStyle(
+                                      fontSize:
+                                          14, // Đặt kích thước chữ nhỏ hơn
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              )
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == null) {
+                                return;
+                              }
+                              _selectedCategory = value;
+                            });
+                          }),
+                      const SizedBox(width: 24),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .end, // Aligns the children to the right
+                          crossAxisAlignment: CrossAxisAlignment
+                              .center, // Aligns the children to the center
+                          children: [
+                            Text(_selectedDate == null
+                                ? 'No Date Chosen'
+                                : formatter.format(_selectedDate!)),
+                            IconButton(
+                              onPressed: _presentDatePicker,
+                              icon: const Icon(Icons.calendar_today),
                             ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          if (value == null) {
-                            return;
-                          }
-                          _selectedCategory = value;
-                        });
-                      }),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, true),
-                    child: const Text("Cancel"),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _amountController,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                              prefixText: '\$ ', labelText: "Amount"),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .end, // Aligns the children to the right
+                          crossAxisAlignment: CrossAxisAlignment
+                              .center, // Aligns the children to the center
+                          children: [
+                            Text(_selectedDate == null
+                                ? 'No Date Chosen'
+                                : formatter.format(_selectedDate!)),
+                            IconButton(
+                              onPressed: _presentDatePicker,
+                              icon: const Icon(Icons.calendar_today),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _submitExpenseData();
-                    },
-                    child: const Text("Add Expense"),
+                if (width >= 600)
+                  Row(
+                    children: [
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text("Cancel"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          _submitExpenseData();
+                        },
+                        child: const Text("Add Expense"),
+                      ),
+                    ],
+                  )
+                else
+                  Row(
+                    children: [
+                      DropdownButton(
+                          value: _selectedCategory, //giá trị mặc định
+                          items: Category.values
+                              .map(
+                                (category) => DropdownMenuItem(
+                                  value: category, //giá trị của mục
+                                  child: Text(
+                                    category.name.toUpperCase(),
+                                    style: const TextStyle(
+                                      fontSize:
+                                          14, // Đặt kích thước chữ nhỏ hơn
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == null) {
+                                return;
+                              }
+                              _selectedCategory = value;
+                            });
+                          }),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text("Cancel"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          _submitExpenseData();
+                        },
+                        child: const Text("Add Expense"),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
