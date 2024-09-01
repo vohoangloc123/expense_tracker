@@ -17,6 +17,7 @@ void main() {
     DeviceOrientation.landscapeRight,
   ]).then((fn) {
     runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
       darkTheme: ThemeData.dark().copyWith(
         useMaterial3: true,
         colorScheme: kDarkColorScheme,
