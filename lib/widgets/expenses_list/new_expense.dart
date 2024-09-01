@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -41,16 +44,23 @@ class _NewExpenseState extends State<NewExpense> {
     });
     print(pickedDate);
   }
+
   //Sử dụng async và await giúp làm cho việc viết và duy trì mã dễ dàng hơn, đặc biệt khi làm việc với các tác vụ bất đồng bộ.
-
-  void _submitExpenseData() {
-    final enteredAmount = double.tryParse(_amountController.text);
-    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
-
-    if (_titleController.text.trim().isEmpty ||
-        amountIsInvalid ||
-        _selectedDate == null ||
-        _selectedCategory == null) {
+  void _showDiagelog() {
+    if (Platform.isIOS) {
+      showCupertinoDialog(
+          context: context,
+          builder: (ctx) => CupertinoAlertDialog(
+                title: const Text("Invalid Input"),
+                content: const Text("Please enter valid input"),
+                actions: [
+                  CupertinoDialogAction(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Okay"),
+                  ),
+                ],
+              ));
+    } else {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -64,6 +74,18 @@ class _NewExpenseState extends State<NewExpense> {
           ],
         ),
       );
+    }
+  }
+
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null ||
+        _selectedCategory == null) {
+      _showDiagelog();
       return;
     }
     widget.onAddExpense(
