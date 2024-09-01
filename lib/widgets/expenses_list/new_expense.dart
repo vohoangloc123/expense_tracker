@@ -86,84 +86,90 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
-      child: Column(
-        children: [
-          TextField(
-            controller: _titleController,
-            maxLength: 50,
-            decoration: const InputDecoration(labelText: "Title"),
-          ),
-          Row(
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+    return SizedBox(
+      height: double.infinity,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(16, 48, 16, keyboardSpace + 16),
+          child: Column(
             children: [
-              Expanded(
-                child: TextField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                      prefixText: '\$ ', labelText: "Amount"),
-                ),
+              TextField(
+                controller: _titleController,
+                maxLength: 50,
+                decoration: const InputDecoration(labelText: "Title"),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.end, // Aligns the children to the right
-                  crossAxisAlignment: CrossAxisAlignment
-                      .center, // Aligns the children to the center
-                  children: [
-                    Text(_selectedDate == null
-                        ? 'No Date Chosen'
-                        : formatter.format(_selectedDate!)),
-                    IconButton(
-                      onPressed: _presentDatePicker,
-                      icon: const Icon(Icons.calendar_today),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _amountController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                          prefixText: '\$ ', labelText: "Amount"),
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              DropdownButton(
-                  value: _selectedCategory, //giá trị mặc định
-                  items: Category.values
-                      .map(
-                        (category) => DropdownMenuItem(
-                          value: category, //giá trị của mục
-                          child: Text(
-                            category.name.toUpperCase(),
-                            style: const TextStyle(
-                              fontSize: 14, // Đặt kích thước chữ nhỏ hơn
-                            ),
-                          ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment
+                          .end, // Aligns the children to the right
+                      crossAxisAlignment: CrossAxisAlignment
+                          .center, // Aligns the children to the center
+                      children: [
+                        Text(_selectedDate == null
+                            ? 'No Date Chosen'
+                            : formatter.format(_selectedDate!)),
+                        IconButton(
+                          onPressed: _presentDatePicker,
+                          icon: const Icon(Icons.calendar_today),
                         ),
-                      )
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      if (value == null) {
-                        return;
-                      }
-                      _selectedCategory = value;
-                    });
-                  }),
-              const Spacer(),
-              TextButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text("Cancel"),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              ElevatedButton(
-                onPressed: () {
-                  _submitExpenseData();
-                },
-                child: const Text("Add Expense"),
+              Row(
+                children: [
+                  DropdownButton(
+                      value: _selectedCategory, //giá trị mặc định
+                      items: Category.values
+                          .map(
+                            (category) => DropdownMenuItem(
+                              value: category, //giá trị của mục
+                              child: Text(
+                                category.name.toUpperCase(),
+                                style: const TextStyle(
+                                  fontSize: 14, // Đặt kích thước chữ nhỏ hơn
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          if (value == null) {
+                            return;
+                          }
+                          _selectedCategory = value;
+                        });
+                      }),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Text("Cancel"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _submitExpenseData();
+                    },
+                    child: const Text("Add Expense"),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
